@@ -1,0 +1,10 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: HTML-code
+
+note over browser:
+here, the response only
+contains a json of a message.
+The page update is handled by 
+spa.js without reloading the
+page
+end note
