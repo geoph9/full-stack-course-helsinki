@@ -24,6 +24,26 @@ const Button = ({handleClick, text}) => (
   </button>
 )
 
+const Statistics = ({goods, neutrals, bads}) => {
+  // Calculate updated stats
+  const getAverage = () => 
+    (goods+neutrals+bads !== 0) ? (goods-bads)/(goods+neutrals+bads): 0
+  const getPositives = () => {
+    if (goods + neutrals + bads === 0) return 0
+    return (goods / (goods+neutrals+bads))*100 + ' %'
+  }
+  return ( 
+    <div>
+      <StatContent name='good' count={goods} />
+      <StatContent name='neutral' count={neutrals} />
+      <StatContent name='bad' count={bads} />
+      <StatContent name='all' count={goods + neutrals + bads} />
+      <StatContent name='average' count={getAverage()} />
+      <StatContent name='positive' count={getPositives()} />
+    </div>
+  )
+}
+
 const App = () => {
   const title = "Give Feedback";
   const stats = "Statistics";
@@ -31,38 +51,11 @@ const App = () => {
   const [goods, setGoods] = useState(0);
   const [neutrals, setNeutrals] = useState(0);
   const [bads, setBads] = useState(0);
-  const [allClicks, setAllClicks] = useState(0);
-  const [average, setAverage] = useState(0);
-  const [positives, setPositives] = useState(0);
 
-  const getAverage = (newGoods, newNeutrals, newBads) => 
-    (newGoods-newBads)/(newGoods+newNeutrals+newBads)
-  const getPositives = (newGoods, newNeutrals, newBads) => {
-    if (newGoods + newNeutrals + newBads === 0) return 0
-    return newGoods / (newGoods+newNeutrals+newBads)
-  }
-  const formatPositives = () => positives*100 + " %"
-
-  const incrementGood = () => {
-    // The increment does not take effect inside the function
-    // and so we still need to pass the incremented variable.
-    setAverage(getAverage(goods+1, neutrals, bads))
-    setPositives(getPositives(goods+1, neutrals, bads))
-    setGoods(goods + 1)
-    setAllClicks(allClicks + 1)
-  }
-  const incrementNeutral = () => {
-    setAverage(getAverage(goods, neutrals+1, bads))
-    setPositives(getPositives(goods, neutrals+1, bads))
-    setNeutrals(neutrals + 1)
-    setAllClicks(allClicks + 1)
-  }
-  const incrementBad = () => {
-    setAverage(getAverage(goods, neutrals, bads+1))
-    setPositives(getPositives(goods, neutrals, bads+1))
-    setBads(bads + 1)
-    setAllClicks(allClicks + 1)
-  }
+  // State setters
+  const incrementGood = () => setGoods(goods + 1)
+  const incrementNeutral = () => setNeutrals(neutrals + 1)
+  const incrementBad = () => setBads(bads + 1)
 
   return (
     <div>
@@ -73,12 +66,7 @@ const App = () => {
       <Button handleClick={incrementBad} text='bad' />
       <br />
       <Header header={stats} />
-      <StatContent name='good' count={goods} />
-      <StatContent name='neutral' count={neutrals} />
-      <StatContent name='bad' count={bads} />
-      <StatContent name='all' count={allClicks} />
-      <StatContent name='average' count={average} />
-      <StatContent name='positive' count={formatPositives()} />
+      <Statistics goods={goods} neutrals={neutrals} bads={bads} />
       </div>
   )
 }
