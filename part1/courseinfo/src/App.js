@@ -2,9 +2,9 @@ import React from 'react'
 
 const Header = (props) => {
   return (
-    <div>
+    <>
       <h1>{props.course}</h1>
-    </div>
+    </>
   )
 }
 
@@ -21,22 +21,22 @@ const Part = (props) => {
 
 const Content = (props) => {
   return (
-    <div>
+    <>
       {props.parts.map((part, index) => 
         <Part part={part} key={index} />
       )}
-    </div>
+    </>
   )
 }
 
 const Total = (props) => {
   const total = props.parts.map(o => o.exercises).reduce((total, current) => total+current);
   return (
-    <div>
+    <>
       <p>
       Number of exercises {total}
       </p>
-    </div>
+    </>
   )
 }
 
@@ -60,11 +60,11 @@ const App = () => {
   }
 
   return (
-    <>
+    <div>
       <Header course={course.name} />
       <Content parts={course.parts} />
       <Total parts={course.parts} />
-    </>
+    </div>
   )
 }
 
