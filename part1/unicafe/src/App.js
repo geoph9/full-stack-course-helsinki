@@ -6,15 +6,15 @@ const Header = ({header}) => {
   )
 }
 
-const History = ({goods, neutrals, bads}) => {  
-  return (    
-    <>
-      <p>Good: {goods}</p>
-      <p>Neutral: {neutrals}</p>
-      <p>Bad: {bads}</p>
-    </>  
-  )
-}
+// const History = ({goods, neutrals, bads}) => {  
+//   return (    
+//     <>
+//       <p>Good: {goods}</p>
+//       <p>Neutral: {neutrals}</p>
+//       <p>Bad: {bads}</p>
+//     </>  
+//   )
+// }
 
 const StatContent = ({name, count}) => <p>{name}: {count}</p>
 
@@ -31,6 +31,11 @@ const Statistics = ({goods, neutrals, bads}) => {
   const getPositives = () => {
     if (goods + neutrals + bads === 0) return 0
     return (goods / (goods+neutrals+bads))*100 + ' %'
+  }
+  if (goods+neutrals+bads === 0) {
+    return (
+      <p>No feedback given</p>
+    )
   }
   return ( 
     <div>
