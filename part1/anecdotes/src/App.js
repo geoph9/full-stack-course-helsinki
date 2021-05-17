@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
-const Button = ({handler}) => {
+const Button = ({handler, text}) => {
   return (
   <button onClick={handler}>
-    next anecdote
+    {text}
   </button>
 )}
 
@@ -20,15 +20,26 @@ const App = () => {
     'Premature optimization is the root of all evil.',
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
   ]
-   
-  const [selected, setSelected] = useState(0)
+  
+  const [selected, setSelected] = useState(0);
+  // An initial object where the keys are the indices and the values are always 0
+  const [votes, setVotes] = useState(Object.fromEntries(anecdotes.map((item, index) => [index, 0])));
+  
   const nextJoke = () => setSelected(getRandom(0, anecdotes.length))
+  const addVote = () => {
+    const copy = { ...votes};
+    copy[selected] += 1;
+    setVotes(copy);
+  }
 
   return (
     <div>
       {anecdotes[selected]}
       <br />
-      <Button handler={nextJoke} />
+      <p>has {votes[selected]} {votes[selected] === 1 ? 'vote' : 'votes'}</p>
+      <br />
+      <Button handler={addVote} text="vote" />
+      <Button handler={nextJoke} text="next anecdote" />
     </div>
   )
 }
