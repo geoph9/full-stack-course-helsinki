@@ -16,7 +16,7 @@ const Header = ({header}) => {
 //   )
 // }
 
-const Statistic = ({name, count}) => <p>{name}: {count}</p>
+const Statistic = ({name, count}) => <tr><td>{name}</td><td>{count}</td></tr>
 
 const Button = ({handleClick, text}) => (
   <button onClick={handleClick}>
@@ -38,14 +38,16 @@ const Statistics = ({goods, neutrals, bads}) => {
     )
   }
   return ( 
-    <div>
-      <Statistic name='good' count={goods} />
-      <Statistic name='neutral' count={neutrals} />
-      <Statistic name='bad' count={bads} />
-      <Statistic name='all' count={goods + neutrals + bads} />
-      <Statistic name='average' count={getAverage()} />
-      <Statistic name='positive' count={getPositives()} />
-    </div>
+    <table>
+      <tbody>
+        <Statistic name='good' count={goods} />
+        <Statistic name='neutral' count={neutrals} />
+        <Statistic name='bad' count={bads} />
+        <Statistic name='all' count={goods + neutrals + bads} />
+        <Statistic name='average' count={getAverage()} />
+        <Statistic name='positive' count={getPositives()} />
+      </tbody>
+    </table>
   )
 }
 
@@ -72,7 +74,7 @@ const App = () => {
       <br />
       <Header header={stats} />
       <Statistics goods={goods} neutrals={neutrals} bads={bads} />
-      </div>
+    </div>
   )
 }
 
