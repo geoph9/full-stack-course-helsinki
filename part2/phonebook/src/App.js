@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import Person from './components/Person'
+import Persons from './components/Persons'
 import Header, {SubHeader} from './components/Header'
+import PersonForm from './components/PersonForm'
+import Filter from './components/Filter'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -20,6 +22,10 @@ const App = () => {
       alert(`${newName} is already added to the phonebook`)
       return
     }
+    if (newName === '' || newNumber === '') {
+      alert("Expected a pair of a person's name and their phone number while only one of those were found.")
+      return
+    }
     const person = {
       name: newName,
       number: newNumber,
@@ -29,48 +35,41 @@ const App = () => {
     setPersons(persons.concat(person))
     setNewName('')
     setNewNumber('')
+    setFilterValue('')
   }
 
   const handleNewName = (event) => {
-    console.log(`name target: ${event.target.value}`);
+    // console.log(`name target: ${event.target.value}`);
     setNewName(event.target.value)
   }
 
   const handleNewNumber = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setNewNumber(event.target.value)
   }
 
   const handleFilterNames = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setFilterValue(event.target.value);
   }
 
   return (
     <div>
       <Header text="Phonebook" />
-      <div>
-        Filter shown with: <input value={filterValue} onChange={handleFilterNames} />
-      </div>
-      {/* <div>debug: {newName}</div> */}
+      <Filter filterValue={filterValue} handleFilterNames={handleFilterNames} />
       <SubHeader text="Add a New" />
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNewName} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNewNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm 
+        addPerson={addPerson} 
+        newName={newName} 
+        handleNewName={handleNewName} 
+        newNumber={newNumber} 
+        handleNewNumber={handleNewNumber}
+      />
       <SubHeader text="Numbers" />
-      <ul>
-        { persons.filter(person => person.name.toLowerCase().includes(filterValue)).map(person =>           
-          <Person key={person.name} person={person} />        
-        )}
-      </ul>
+      <Persons 
+        persons={persons}
+        filterValue={filterValue}
+      />
     </div>
   )
 }
