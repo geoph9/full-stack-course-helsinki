@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Countries from './components/Countries'
+import SingleCountry from './components/SingleCountry'
 import Filter from './components/Filter'
 import axios from 'axios';
 
@@ -7,6 +8,7 @@ const maxNumberOfCountries = 10;
 
 const App = () => {
   const [countries, setCountries] = useState([]);
+  const [chosenCountry, setChosenCountry] = useState('');
 
   const [ filterValue, setFilterValue ] = useState('')
 
@@ -30,7 +32,9 @@ const App = () => {
       <Countries
         countries={countries}
         maxNumberOfCountries={maxNumberOfCountries}
+        setChosenCountry={setChosenCountry}
       />
+      <SingleCountry country={chosenCountry} />
     </div>
   )
 }
