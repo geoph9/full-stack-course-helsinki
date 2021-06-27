@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Countries from './components/Countries'
 import SingleCountry from './components/SingleCountry'
 import Filter from './components/Filter'
+import Weather from './components/Weather'
 import axios from 'axios';
 
 const maxNumberOfCountries = 10;
@@ -9,8 +10,17 @@ const maxNumberOfCountries = 10;
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [chosenCountry, setChosenCountry] = useState('');
+  const [weather, setWeather] = useState({});
 
   const [ filterValue, setFilterValue ] = useState('')
+
+  // const updateWeather = (query) => {
+  //   axios
+  //     .get(`http://api.weatherstack.com/current?access_key=${weatherStackApiKey}?query=${query}`)
+  //     .then(response => {
+  //       setWeather(response.data.current)
+  //     })
+  // }
 
   const handleFilterChange = (event) => {
     setFilterValue(event.target.value);
@@ -33,8 +43,10 @@ const App = () => {
         countries={countries}
         maxNumberOfCountries={maxNumberOfCountries}
         setChosenCountry={setChosenCountry}
+        setWeather={setWeather}
       />
       <SingleCountry country={chosenCountry} />
+      <Weather country={chosenCountry} weather={weather} />
     </div>
   )
 }

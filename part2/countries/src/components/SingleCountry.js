@@ -1,10 +1,5 @@
 import React from 'react'
-
-const Image = ({url}) => {
-  return (
-    <img src={url} height="80px" width="80px" />
-  )
-}
+import Image from './Image'
 
 const Language = ({language}) => {
     return (
@@ -27,7 +22,7 @@ const SingleCountry = ({country}) => {
           <Language key={language.name} language={language} />
         )}
       </ul>
-      <Image url={country.flag} />
+      <Image url={country.flag} width="120px" height="80px" />
     </div>
   )
 }
