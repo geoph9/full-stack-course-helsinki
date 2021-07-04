@@ -22,10 +22,35 @@ const App = () => {
   }
   useEffect(hook, [])
 
+  const updatePerson = (person) => {
+    const replaceConfirm = window.confirm(`${newName} is already added to the phonebook, replace the old number?`)
+    if (replaceConfirm === false) return
+
+    // const person = persons.find(p => p.id === id)
+    const changedPerson = { ...person, number: newNumber }
+
+    personService
+      .update(person.id, changedPerson)
+      .then(returnedPerson => {
+        setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+      })
+      .catch(error => {
+        alert(
+          `Person '${person.name}' could not be found in the server.`
+        )
+        setPersons(n => n.id !== person.id)
+      })
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
     if (persons.map((person) => person.name).includes(newName)) {
-      alert(`${newName} is already added to the phonebook`)
+      const thatPerson = persons.filter((person) => person.name === newName)[0];
+      if (thatPerson.number === newNumber) {
+        alert(`${newName} is already added to the phonebook`)
+        return
+      }
+      updatePerson(thatPerson)
       return
     }
     if (newName === '' || newNumber === '') {
