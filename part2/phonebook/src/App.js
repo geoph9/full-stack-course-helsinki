@@ -38,10 +38,6 @@ const App = () => {
       // id: persons.length + 1,
     }
   
-    // setPersons(persons.concat(person))
-    // setNewName('')
-    // setNewNumber('')
-    // setFilterValue('')
     personService
       .create(person)
       .then(returnedPerson => {
@@ -67,6 +63,35 @@ const App = () => {
     setFilterValue(event.target.value);
   }
 
+  const deletePerson = (id) => {
+    const person = persons.find(p => p.id === id);
+    const confirmation = window.confirm(`Delete ${person.name}?`);
+    if (confirmation === false) {
+      return
+    }
+    if (!persons.map((p) => p.name).includes(person.name)) {
+      alert(`${newName} is not a part of the phonebook`)
+      return
+    }
+  
+    personService
+      .remove(id)
+      .then(returnedPerson => {
+        setPersons(
+          persons.filter(p => p.id !== id)
+        )
+        setNewName('')
+        setNewNumber('')
+        setFilterValue('')
+      })
+      .catch(error => {
+        alert(
+          `The person '${person.name}' was already deleted from the server.`
+        )
+        setPersons(p => p.id !== id)
+      })
+  }
+
   return (
     <div>
       <Header text="Phonebook" />
@@ -83,6 +108,7 @@ const App = () => {
       <Persons 
         persons={persons}
         filterValue={filterValue}
+        deletePerson={deletePerson}
       />
     </div>
   )
