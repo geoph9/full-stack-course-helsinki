@@ -2,9 +2,17 @@ import React, { useEffect, useState } from 'react'
 import Persons from './components/Persons'
 import Header, {SubHeader} from './components/Header'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 import Filter from './components/Filter'
 // import axios from 'axios';
 import personService from './services/persons'
+
+const showNotification = (setNotification, text, timeout=3000) => {
+  setNotification(text)
+  setTimeout(() => {
+    setNotification(null)
+  }, timeout)
+}
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,6 +20,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterValue, setFilterValue ] = useState('')
+  const [ notification, setNotification ] = useState(null)
 
   const hook = () => {
     personService
@@ -33,6 +42,7 @@ const App = () => {
       .update(person.id, changedPerson)
       .then(returnedPerson => {
         setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+        showNotification(setNotification, `Updated ${person.name}`, 3000)
       })
       .catch(error => {
         alert(
@@ -70,6 +80,7 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         setFilterValue('')
+        showNotification(setNotification, `Added ${person.name}`, 3000)
       })
   }
 
@@ -120,6 +131,7 @@ const App = () => {
   return (
     <div>
       <Header text="Phonebook" />
+      <Notification message={notification} />
       <Filter filterValue={filterValue} handleFilterNames={handleFilterNames} />
       <SubHeader text="Add a New" />
       <PersonForm 
