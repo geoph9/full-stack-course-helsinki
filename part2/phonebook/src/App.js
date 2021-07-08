@@ -21,6 +21,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterValue, setFilterValue ] = useState('')
   const [ notification, setNotification ] = useState(null)
+  const [ errorMessage, setErrorMessage ] = useState(null)
 
   const hook = () => {
     personService
@@ -45,10 +46,16 @@ const App = () => {
         showNotification(setNotification, `Updated ${person.name}`, 3000)
       })
       .catch(error => {
-        alert(
-          `Person '${person.name}' could not be found in the server.`
+        // alert(
+        //   `Person '${person.name}' could not be found in the server.`
+        // )
+        showNotification(
+          setErrorMessage, 
+          `Information of ${person.name} has already been removed from the server`, 
+          5000
         )
-        setPersons(n => n.id !== person.id)
+
+        // setPersons(n => n.id !== person.id)
       })
   }
 
@@ -119,6 +126,7 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         setFilterValue('')
+        showNotification(setNotification, `Deleted ${person.name}`, 3000)
       })
       .catch(error => {
         alert(
@@ -131,7 +139,8 @@ const App = () => {
   return (
     <div>
       <Header text="Phonebook" />
-      <Notification message={notification} />
+      <Notification message={notification} type="notification" />
+      <Notification message={errorMessage} type="error" />
       <Filter filterValue={filterValue} handleFilterNames={handleFilterNames} />
       <SubHeader text="Add a New" />
       <PersonForm 
