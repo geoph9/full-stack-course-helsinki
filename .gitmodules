@@ -1,0 +1,3 @@
+[submodule "phonebook/phonebook-backend"]
+	path = phonebook/phonebook-backend
+	url = git@github.com:geoph9/phonebook-webapp.git
