@@ -68,11 +68,21 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  console.log("Name:", body.name, "== NUMBER:", body.number)
-  if (!body.name || !body.number) {
+  if (!body.name) {
     return response.status(400).json({ 
-      error: 'Missing persons name or number.' 
-    })
+      error: 'Missing name.' 
+    })  	
+  }
+  if (!body.number) {
+    return response.status(400).json({ 
+      error: 'Missing phone number.' 
+    })  	
+  }
+  const nameExists = persons.filter(p => p.name === body.name).length > 0
+  if (nameExists) {
+    return response.status(400).json({ 
+      error: 'Name already exists in the database.'
+    })  	
   }
 
   const person = {
