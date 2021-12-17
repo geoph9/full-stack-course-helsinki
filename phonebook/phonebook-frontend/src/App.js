@@ -37,6 +37,15 @@ const App = () => {
     if (replaceConfirm === false) return
 
     // const person = persons.find(p => p.id === id)
+    // console.log(`GOT NEW PERSON: ${person}. newName=${newName} and newNumber=${newNumber}`)
+    if (newNumber === '') {
+      showNotification(
+        setErrorMessage, 
+        `Phone number is missing.`, 
+        5000
+      )
+      return
+    }
     const changedPerson = { ...person, number: newNumber }
 
     personService
@@ -46,16 +55,19 @@ const App = () => {
         showNotification(setNotification, `Updated ${person.name}`, 3000)
       })
       .catch(error => {
-        // alert(
-        //   `Person '${person.name}' could not be found in the server.`
-        // )
-        showNotification(
-          setErrorMessage, 
-          `Information of ${person.name} has already been removed from the server`, 
-          5000
-        )
-
-        // setPersons(n => n.id !== person.id)
+        if (error.response.data.error.includes("validation failed")) {
+          showNotification(
+            setErrorMessage, 
+            `${error.response.data.error}`, 
+            5000
+          )
+        } else {
+          showNotification(
+            setErrorMessage, 
+            `Information of ${person.name} has already been removed from the server`, 
+            5000
+          )
+        }
       })
   }
 
@@ -64,7 +76,7 @@ const App = () => {
     if (persons.map((person) => person.name).includes(newName)) {
       const thatPerson = persons.filter((person) => person.name === newName)[0];
       if (thatPerson.number === newNumber) {
-        alert(`${newName} is already added to the phonebook`)
+        alert(`${newName} is already added to the phonebook with the same number.`)
         return
       }
       updatePerson(thatPerson)
@@ -88,6 +100,15 @@ const App = () => {
         setNewNumber('')
         setFilterValue('')
         showNotification(setNotification, `Added ${person.name}`, 3000)
+      })
+      .catch(error => {
+        // this is the way to access the error message
+        console.log(error.response.data.error)
+        showNotification(
+          setErrorMessage, 
+          `${error.response.data.error}`, 
+          5000
+        )
       })
   }
 
