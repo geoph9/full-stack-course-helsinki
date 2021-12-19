@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 const totalLikes = require('../utils/list_helper').totalLikes
 const favoriteBlog = require('../utils/list_helper').favoriteBlog
 
@@ -64,31 +65,12 @@ describe('totalLikes', () => {
       __v: 0
     }
   ]
-  const listWithManyBlogs = [
-    listWithOneBlog[0],
-    {
-      _id: '5a422aa71b54a676234d17f9',
-      title: 'Steppenwolf',
-      author: 'Hermann Hesse',
-      url: 'https://www.goodreads.com/book/show/16631.Steppenwolf',
-      likes: 10,
-      __v: 0
-    },
-    {
-      _id: '5a422aa71b54a676234d17f7',
-      title: 'Siddhartha',
-      author: 'Hermann Hesse',
-      url: 'https://www.goodreads.com/book/show/52036.Siddhartha',
-      likes: 0,
-      __v: 0
-    },
-  ]
   test('of one value is the value itself', () => {
     expect(totalLikes(listWithOneBlog)).toBe(5)
   })
 
   test('of many is calculated right', () => {
-    expect(totalLikes(listWithManyBlogs)).toBe(15)
+    expect(totalLikes(blogs)).toBe(36)
   })
 
   test('of empty array is zero', () => {
@@ -113,7 +95,11 @@ describe('favoriteBlog', () => {
     })
   })
 
-  test('of empty array is an empty object', () => {
-    expect(favoriteBlog([{}])).toBe(undefined)
+  test('of array with empty object is an empty object', () => {
+    expect(favoriteBlog([{}])).toEqual({})
+  })
+
+  test('of no array is an empty object', () => {
+    expect(favoriteBlog(null)).toEqual({})
   })
 })

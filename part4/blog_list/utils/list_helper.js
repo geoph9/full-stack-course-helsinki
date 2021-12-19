@@ -1,4 +1,5 @@
-const dummy = (blogs) => {
+// eslint-disable-next-line no-unused-vars
+const dummy = (_blogs) => {
   return 1
 }
 
@@ -15,21 +16,23 @@ const totalLikes = (list) => {
 const favoriteBlog = (list) => {
   const reducer = (currFavorite, item) => {
     let currLikes = currFavorite.likes === undefined ? 0 : currFavorite.likes
-  	let likes = item.likes === undefined ? 0 : item.likes
-  	if (likes > currLikes) {
-  	  return {
-  	  	title: item.title,
-  	  	author: item.author,
-  	  	likes: likes,
-  	  }
-  	}
-  	return currFavorite
+    let likes = item.likes === undefined ? 0 : item.likes
+    if (likes > currLikes) {
+      return {
+        title: item.title,
+        author: item.author,
+        likes: likes,
+      }
+    }
+    return currFavorite
   }
-  return list.length === 0
-    ? undefined
-    : list.reduce(reducer, list[0])
+  if (!( list instanceof Array)) return {}
+  return list.length === 1
+    ? {title: list[0].title, author: list[0].author, likes: list[0].likes}
+    : list.reduce(reducer, 0)
 }
   
+// eslint-disable-next-line no-unused-vars
 const average = (array) => {
   const reducer = (sum, item) => {
     return sum + item
