@@ -30,8 +30,5 @@
     "jest": "^27.4.5",
     "nodemon": "^2.0.12",
     "supertest": "^6.1.6"
-  },
-  "jest": {
-    "testEnvironment": "node"
   }
 }
