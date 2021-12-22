@@ -68,7 +68,7 @@ describe('adding new blog posts', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
-      .expect(200)
+      .expect(201)
   
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
