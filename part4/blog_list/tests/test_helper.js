@@ -1,6 +1,11 @@
 /* eslint-disable quotes */
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+const dummyUsername = "dummy"
+const dummyPassword = "password"
 
 const initialBlogs = [
   {
@@ -45,6 +50,39 @@ const initialBlogs = [
   }  
 ]
 
+const createDummyUser = async () => {
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash(dummyPassword, saltRounds)
+
+  const user = new User({
+    username: dummyUsername,
+    name: 'dumdum',
+    passwordHash,
+  })
+
+  const savedUser = await user.save()
+  return savedUser
+}
+
+const loginUser = async (username, password) => {
+
+  const user = await User.findOne({ username })
+  const passwordCorrect = user === null
+    ? false
+    : await bcrypt.compare(password, user.passwordHash)
+
+  if (!(user && passwordCorrect)) {
+    return 'invalid username or password'
+  }
+  const userForToken = {
+    username: user.username,
+    id: user._id,
+  }
+
+  const token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 60*60 })
+  return token
+}
+
 const nonExistingId = async () => {
   const blog = new Blog({ 
     title: 'willremovethissoon', 
@@ -72,5 +110,8 @@ module.exports = {
   initialBlogs, 
   nonExistingId, 
   blogsInDb,
-  usersInDb
+  usersInDb,
+  createDummyUser,
+  loginUser,
+  dummyUsername, dummyPassword,
 }

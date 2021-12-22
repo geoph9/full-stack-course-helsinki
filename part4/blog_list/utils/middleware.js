@@ -35,7 +35,11 @@ const errorHandler = (error, request, response, next) => {
 }
 
 const tokenExtractor = (request, response, next) => {
-  if (request.method !== 'POST' && request.method !== 'DELETE') {
+  if (
+    request.method !== 'POST' && 
+    request.method !== 'DELETE' && 
+    request.method !== 'PUT'
+  ) {
     return next()
   }
   const authorization = request.get('authorization')  
@@ -50,7 +54,11 @@ const tokenExtractor = (request, response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
-  if (request.method !== 'POST' && request.method !== 'DELETE') {
+  if (
+    request.method !== 'POST' && 
+    request.method !== 'DELETE' && 
+    request.method !== 'PUT'
+  ) {
     return next()
   }
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
