@@ -22,7 +22,6 @@ const App = () => {
   const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
-  const showBlogDetailsRef = useRef()
 
   useEffect(() => {
     const featchAll = async () => {
@@ -40,6 +39,18 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const removeBlog = async (blog) => {
+    const deleteConfirm = window.confirm(`Delete blog '${blog.title}' by '${blog.author}'?`)
+    if (deleteConfirm === false) return
+    const res = await blogService.removeBlog(blog)
+    console.log("GORE RESUTLS:", res)
+    if (res) {
+      setBlogs(  // remove blog
+        blogs.filter((b) => b.id !== blog.id)
+      )
+    }
+  }
 
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
@@ -159,11 +170,7 @@ const App = () => {
         </Togglable>
         <br />
         {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
-          // <Blog key={blog.id} blog={blog} />
-          // <Togglable buttonLabel="{blog.title} {blog.author}" cancelLabel="Hide" ref={showBlogDetailsRef}>
-          //   <Blog key={blog.id} blog={blog} user={user} />
-          // </Togglable>
-          <Blog key={blog.id} blog={blog} user={user} />
+          <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
         )}
       </>
     )

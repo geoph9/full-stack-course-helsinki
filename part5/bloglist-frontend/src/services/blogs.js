@@ -21,6 +21,19 @@ const create = async newObject => {
   }
 }
 
+const removeBlog = async (blog) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  const url = `${baseUrl}/${blog.id}`
+  try{
+    await axios.delete(url, config)
+    return true
+  } catch(err) {
+    return null
+  }
+}
+
 const increaseLikes = async (newObject) => {
   const url = `${baseUrl}/${newObject.id}`
   const config = {
@@ -30,10 +43,9 @@ const increaseLikes = async (newObject) => {
     const response = await axios.put(url, newObject, config)
     return response.data
   } catch (err) {
-    console.log("ERROR:", err)
-    throw err
+    // console.log("ERROR:", err)
     return null
   }
 }
 
-export default { getAll, setToken, create, increaseLikes}
+export default { getAll, setToken, create, increaseLikes, removeBlog}

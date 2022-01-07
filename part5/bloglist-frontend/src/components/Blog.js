@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
-import Togglable from './Togglable'
 import blogService from '../services/blogs'
 
-const Blog = ({blog, user}) => {
+const Blog = ({blog, user, removeBlog}) => {
   const [visible, setVisible] = useState(false)
   const [likeButtonText, setLikeButtonText] = useState("like")
   const [currentLikes, setCurrentLikes] = useState(blog.likes)
 
+  // API FUNCTIONS THAT CONCERN ALTERATIONS
   const changeLikes = async () => {
     const newText = (likeButtonText === "like") ? "dislike" : "like"
     const incrValue = (likeButtonText === "like") ? 1 : -1
@@ -17,28 +17,9 @@ const Blog = ({blog, user}) => {
       setLikeButtonText(newText)
     }
   }
+  ///
 
-  const blogDetails = () => (
-    <div>
-      <div>
-        {blog.title} {blog.author}
-      </div>
-      <div>
-        {blog.url}
-      </div>
-      <div>
-        likes: {currentLikes} 
-        <button onClick={changeLikes}> 
-          {likeButtonText}
-        </button>
-      </div>
-      <div>
-        {user.name}
-      </div>
-    </div>
-  )
-  // const hideWhenVisible = { border: "1px solid", display: visible ? 'none' : '' }
-  // const showWhenVisible = { border: "1px solid", display: visible ? '' : 'none' }
+  // STYLING
   const hideWhenVisible = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -48,17 +29,45 @@ const Blog = ({blog, user}) => {
     display: visible ? 'none' : ''
   }
   const showWhenVisible = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
+    ...hideWhenVisible,
     display: visible ? '' : 'none'
   }
   const toggleVisibility = () => {
     setVisible(!visible)
   }
+  ///
+
+  // EJX
+  const blogDetails = () => (
+    <div>
+      <div>{blog.title} {blog.author}</div>
+      <div>{blog.url}</div>
+      <div>
+        likes: {currentLikes} 
+        <button onClick={changeLikes}> {likeButtonText}</button>
+      </div>
+      <div>{blog.user.name}</div>
+    </div>
+  )
+  const deleteButton = () => {
+    // NOTE: USERNAME IS ASSUMED TO BE UNIQUE
+    if (blog.user.name && blog.user.name.toString() !== user.name.toString()) return
+    return (
+        <div>
+          <button 
+          onClick={() => removeBlog(blog)} 
+          style={{
+            backgroundColor: 'blue', 
+            color: 'black',
+            borderRadius: '8px'
+          }}>
+            remove
+          </button>
+        </div>
+    )
+  }
   const buttonName = `${blog.title} ${blog.author}`
+  ///
   return (
     <>
       {/* <Togglable buttonLabel="View" cancelLabel="Hide" showBorder={true}>
@@ -71,6 +80,7 @@ const Blog = ({blog, user}) => {
       <div style={showWhenVisible}>
         {blogDetails()}
         <button onClick={toggleVisibility}>Hide</button>
+        {deleteButton()}
       </div>
     </>
   )
