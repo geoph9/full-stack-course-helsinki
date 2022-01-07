@@ -17,7 +17,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [notification, setNotification] = useState(null)
-  const [username, setUsername] = useState('')   
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
@@ -44,7 +44,7 @@ const App = () => {
     const deleteConfirm = window.confirm(`Delete blog '${blog.title}' by '${blog.author}'?`)
     if (deleteConfirm === false) return
     const res = await blogService.removeBlog(blog)
-    console.log("GORE RESUTLS:", res)
+    console.log('GORE RESUTLS:', res)
     if (res) {
       setBlogs(  // remove blog
         blogs.filter((b) => b.id !== blog.id)
@@ -71,10 +71,10 @@ const App = () => {
     )
   }
 
-  const handleLogin = async (event) => {    
+  const handleLogin = async (event) => {
     event.preventDefault()
-    try {      
-      const loggedUser = await loginService.login({        
+    try {
+      const loggedUser = await loginService.login({
         username, password,
       })
       if (!loggedUser) {
@@ -87,7 +87,7 @@ const App = () => {
       }
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(loggedUser)
-      ) 
+      )
       blogService.setToken(loggedUser.token)
       setUser(loggedUser)
       setUsername('')
@@ -106,7 +106,7 @@ const App = () => {
     }
   }
 
-  const logoutUser = async (event) => {    
+  const logoutUser = async (event) => {
     event.preventDefault()
     if (!user) {
       setErrorMessage('User was already logged out')
@@ -130,7 +130,7 @@ const App = () => {
         <form onSubmit={handleLogin}>
           <div>
             username
-              <input
+            <input
               type="text"
               value={username}
               name="Username"
@@ -139,7 +139,7 @@ const App = () => {
           </div>
           <div>
             password
-              <input
+            <input
               type="password"
               value={password}
               name="Password"
@@ -160,7 +160,7 @@ const App = () => {
         <Notification message={errorMessage} type="error" />
         <div>
           <p>{user.name} logged-in</p>
-          <button onClick={logoutUser}>          
+          <button onClick={logoutUser}>
               logout
           </button>
         </div>
@@ -178,8 +178,8 @@ const App = () => {
 
   return (
     <div>
-      {user === null ? 
-        loginForm() : 
+      {user === null ?
+        loginForm() :
         <div>
           {showBlogs()}
         </div>

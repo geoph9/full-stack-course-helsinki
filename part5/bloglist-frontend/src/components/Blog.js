@@ -1,16 +1,16 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({blog, user, removeBlog}) => {
+const Blog = ({ blog, user, removeBlog }) => {
   const [visible, setVisible] = useState(false)
-  const [likeButtonText, setLikeButtonText] = useState("like")
+  const [likeButtonText, setLikeButtonText] = useState('like')
   const [currentLikes, setCurrentLikes] = useState(blog.likes)
 
   // API FUNCTIONS THAT CONCERN ALTERATIONS
   const changeLikes = async () => {
-    const newText = (likeButtonText === "like") ? "dislike" : "like"
-    const incrValue = (likeButtonText === "like") ? 1 : -1
-    const newBlog = {...blog, likes: currentLikes+incrValue}
+    const newText = (likeButtonText === 'like') ? 'dislike' : 'like'
+    const incrValue = (likeButtonText === 'like') ? 1 : -1
+    const newBlog = { ...blog, likes: currentLikes+incrValue }
     const res = await blogService.increaseLikes(newBlog)
     if (res !== null) {
       setCurrentLikes(currentLikes+incrValue)
@@ -43,7 +43,7 @@ const Blog = ({blog, user, removeBlog}) => {
       <div>{blog.title} {blog.author}</div>
       <div>{blog.url}</div>
       <div>
-        likes: {currentLikes} 
+        likes: {currentLikes}
         <button onClick={changeLikes}> {likeButtonText}</button>
       </div>
       <div>{blog.user.name}</div>
@@ -53,28 +53,28 @@ const Blog = ({blog, user, removeBlog}) => {
     // NOTE: USERNAME IS ASSUMED TO BE UNIQUE
     if (blog.user.name && blog.user.name.toString() !== user.name.toString()) return
     return (
-        <div>
-          <button 
-          onClick={() => removeBlog(blog)} 
+      <div>
+        <button
+          onClick={() => removeBlog(blog)}
           style={{
-            backgroundColor: 'blue', 
+            backgroundColor: 'blue',
             color: 'black',
             borderRadius: '8px'
           }}>
             remove
-          </button>
-        </div>
+        </button>
+      </div>
     )
   }
   const buttonName = `${blog.title} ${blog.author}`
   ///
   return (
     <>
-      {/* <Togglable buttonLabel="View" cancelLabel="Hide" showBorder={true}>
-        
+      {/* <Togglable buttonLabel='View' cancelLabel='Hide' showBorder={true}>
+
       </Togglable> */}
       <div style={hideWhenVisible}>
-        {buttonName} 
+        {buttonName}
         <button onClick={toggleVisibility}>View</button>
       </div>
       <div style={showWhenVisible}>

@@ -48,4 +48,4 @@ const increaseLikes = async (newObject) => {
   }
 }
 
-export default { getAll, setToken, create, increaseLikes, removeBlog}
+export default { getAll, setToken, create, increaseLikes, removeBlog }
