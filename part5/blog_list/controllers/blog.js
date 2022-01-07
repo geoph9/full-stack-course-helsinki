@@ -42,23 +42,32 @@ blogsRouter.put('/:id', async (request, response) => {
   const user = request.user
   const originalBlog = await Blog.findById(request.params.id)
   if (originalBlog === null) {
-    response.status(400).json({
+    return response.status(400).json({
       error: 'Could not find a blog with this id.'
-    })
-    return
-  }
-  if (originalBlog.user.toString() !== user.id.toString()) {
-    return response.status(401).json({
-      error: 'You cannot update another user\'s blog.'
     })
   }
   const body = request.body
 
-  const newBlog = {  // title can't change
+  let newBlog = {  // title can't change
     author: body.author,
     url: body.url,
     likes: body.likes,
     id: request.params.id,
+  }
+
+  if (originalBlog.user.toString() !== user.id.toString()) {
+    console.log(body.author, body.url, body.likes, originalBlog)
+    if (
+      body.author === originalBlog.author && 
+      body.url === originalBlog.url &&
+      body.likes !== originalBlog.likes
+    ) {
+      newBlog = {...originalBlog, likes: body.likes}
+    } else {
+      return response.status(401).json({
+        error: 'You cannot update another user\'s blog.'
+      })
+    }
   }
 
   const updatedBlogPost = await Blog.findByIdAndUpdate(
