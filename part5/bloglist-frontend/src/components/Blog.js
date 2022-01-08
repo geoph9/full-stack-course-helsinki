@@ -1,26 +1,28 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
 
-const Blog = ({ blog, user, removeBlog }) => {
+const Blog = ({ blog, user, removeBlog, increaseLikes }) => {
   const [visible, setVisible] = useState(false)
-  const [likeButtonText, setLikeButtonText] = useState('like')
+  // const [likeButtonText, setLikeButtonText] = useState('like')
   const [currentLikes, setCurrentLikes] = useState(blog.likes)
 
   // API FUNCTIONS THAT CONCERN ALTERATIONS
   const changeLikes = async () => {
-    const newText = (likeButtonText === 'like') ? 'dislike' : 'like'
-    const incrValue = (likeButtonText === 'like') ? 1 : -1
-    const newBlog = { ...blog, likes: currentLikes+incrValue }
-    const res = await blogService.increaseLikes(newBlog)
-    if (res === false) {
-      console.log('JWT Token expired. Logout and re-login')
-      setLikeButtonText('JWT Token expired')
-      return
-    }
-    if (res !== null) {
-      setCurrentLikes(currentLikes+incrValue)
-      setLikeButtonText(newText)
-    }
+    // const newText = (likeButtonText === 'like') ? 'dislike' : 'like'
+    // const incrValue = (likeButtonText === 'like') ? 1 : -1
+    // const newBlog = { ...blog, likes: currentLikes+incrValue }
+    // const res = await blogService.update(newBlog)
+    // if (res === false) {
+    //   console.log('JWT Token expired. Logout and re-login')
+    //   setLikeButtonText('JWT Token expired')
+    //   return
+    // }
+    // if (res !== null) {
+    //   setCurrentLikes(currentLikes+incrValue)
+    //   setLikeButtonText(newText)
+    // }
+    const res = await increaseLikes(blog)
+    if (res)  setCurrentLikes(currentLikes+1)
+    blog.likes++
   }
   ///
 
@@ -39,7 +41,7 @@ const Blog = ({ blog, user, removeBlog }) => {
       <div>{blog.url}</div>
       <div>
         likes: {currentLikes}
-        <button onClick={changeLikes}> {likeButtonText}</button>
+        <button onClick={changeLikes}> like</button>
       </div>
       <div>{blog.user.name}</div>
     </div>

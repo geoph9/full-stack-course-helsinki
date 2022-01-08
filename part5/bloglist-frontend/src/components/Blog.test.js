@@ -6,7 +6,7 @@ import Blog from './Blog'
 
 
 describe('<Blog />', () => {
-  let blog, user, component, mockHandler
+  let blog, user, component, mockRemoveHandler, mockIncreaseHandler
   beforeEach(() => {
     blog = {
       title: 'Random Blog',
@@ -19,9 +19,15 @@ describe('<Blog />', () => {
       name: 'Faust'
     }
     blog['user'] = user
-    mockHandler = jest.fn()
+    mockRemoveHandler = jest.fn()
+    mockIncreaseHandler = jest.fn()
     component = render(
-      <Blog blog={blog} user={user} removeBlog={mockHandler} />
+      <Blog
+        blog={blog}
+        user={user}
+        removeBlog={mockRemoveHandler}
+        increaseLikes={mockIncreaseHandler}
+      />
     )
   })
 
@@ -40,6 +46,8 @@ describe('<Blog />', () => {
   test('By default does not render url and likes', () => {
     const expandedDescr = component.container.querySelector('.blogDetailsExpanded')
     expect(expandedDescr).toHaveStyle('display: none')
+    // Since the details are not shown then the short description must be shown
+    // where the short description is the title and the author's name.
     const shortDescr = component.container.querySelector('.blogDetailsShort')
     expect(shortDescr).not.toHaveStyle('display: none')
   })
@@ -53,11 +61,20 @@ describe('<Blog />', () => {
     expect(expandedDescr).not.toHaveStyle('display: none')
   })
 
+  test('like: clicking the button twice calls event handler twice', () => {
+
+    const button = component.getByText('like')
+    fireEvent.click(button)
+    fireEvent.click(button)
+
+    expect(mockIncreaseHandler.mock.calls).toHaveLength(2)
+  })
+
   test('clicking the button calls event handler once', () => {
 
     const button = component.getByText('remove')
     fireEvent.click(button)
 
-    expect(mockHandler.mock.calls).toHaveLength(1)
+    expect(mockRemoveHandler.mock.calls).toHaveLength(1)
   })
 })

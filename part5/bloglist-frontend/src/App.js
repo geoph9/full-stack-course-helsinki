@@ -52,6 +52,19 @@ const App = () => {
     }
   }
 
+  const increaseLikes = async (blog) => {
+    const newBlog = { ...blog, likes: blog.likes+1 }
+    console.log('NEW BLOG:', newBlog)
+    const res = await blogService.update(newBlog)
+    if (res === false) {
+      setErrorMessage('JWT Token expired. Logout and re-login')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+    return res
+  }
+
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     const returnedBlog = await blogService.create(blogObject)
@@ -171,7 +184,12 @@ const App = () => {
         <br />
         <ul>
           {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
-            <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
+            <Blog key={blog.id}
+              blog={blog}
+              user={user}
+              removeBlog={removeBlog}
+              increaseLikes={increaseLikes}
+            />
           )}
         </ul>
       </>

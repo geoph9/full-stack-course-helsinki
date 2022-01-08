@@ -57,12 +57,13 @@ blogsRouter.put('/:id', async (request, response) => {
 
   if (originalBlog.user.toString() !== user.id.toString()) {
     console.log(body.author, body.url, body.likes, originalBlog)
+    // an external user is allowed to increase the likes
     if (
       body.author === originalBlog.author && 
       body.url === originalBlog.url &&
       body.likes !== originalBlog.likes
     ) {
-      newBlog = {...originalBlog, likes: body.likes}
+      newBlog = {...newBlog, likes: body.likes}
     } else {
       return response.status(401).json({
         error: 'You cannot update another user\'s blog.'
@@ -70,6 +71,7 @@ blogsRouter.put('/:id', async (request, response) => {
     }
   }
 
+  console.log('UPDATING WITH BLOG:', newBlog)
   const updatedBlogPost = await Blog.findByIdAndUpdate(
     request.params.id, newBlog, { new: true }
   )
