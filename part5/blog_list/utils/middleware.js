@@ -42,8 +42,7 @@ const tokenExtractor = (request, response, next) => {
   ) {
     return next()
   }
-  const authorization = request.get('authorization')  
-  console.log("AUTH:", authorization)
+  const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {    
     request.token = authorization.substring(7)
   } else {
@@ -62,8 +61,16 @@ const userExtractor = async (request, response, next) => {
   ) {
     return next()
   }
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  console.log("DECODED TOKEN:", decodedToken)
+  let decodedToken
+  try {
+    decodedToken = jwt.verify(request.token, process.env.SECRET)
+  } catch (e) {
+    // JWT expired
+    return response.status(401).json({
+      error: 'Token expired, logout and re-login to make this work.'
+    })
+  }
+  console.log('DECODED TOKEN:', decodedToken)
   if (!decodedToken.id) {
     return response.status(401).json({
       error: 'invalid token'

@@ -43,7 +43,10 @@ const increaseLikes = async (newObject) => {
     const response = await axios.put(url, newObject, config)
     return response.data
   } catch (err) {
-    // console.log("ERROR:", err)
+    console.log('ERROR:', err.response.data)
+    if (err.response.status === 401 && err.response.data.error.includes('Token expired')) {
+      return false
+    }
     return null
   }
 }

@@ -12,6 +12,11 @@ const Blog = ({ blog, user, removeBlog }) => {
     const incrValue = (likeButtonText === 'like') ? 1 : -1
     const newBlog = { ...blog, likes: currentLikes+incrValue }
     const res = await blogService.increaseLikes(newBlog)
+    if (res === false) {
+      console.log('JWT Token expired. Logout and re-login')
+      setLikeButtonText('JWT Token expired')
+      return
+    }
     if (res !== null) {
       setCurrentLikes(currentLikes+incrValue)
       setLikeButtonText(newText)
@@ -20,18 +25,8 @@ const Blog = ({ blog, user, removeBlog }) => {
   ///
 
   // STYLING
-  const hideWhenVisible = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-    display: visible ? 'none' : ''
-  }
-  const showWhenVisible = {
-    ...hideWhenVisible,
-    display: visible ? '' : 'none'
-  }
+  const hideWhenVisible = { display: visible ? 'none' : '' }
+  const showWhenVisible = { display: visible ? '' : 'none' }
   const toggleVisibility = () => {
     setVisible(!visible)
   }
@@ -73,15 +68,15 @@ const Blog = ({ blog, user, removeBlog }) => {
       {/* <Togglable buttonLabel='View' cancelLabel='Hide' showBorder={true}>
 
       </Togglable> */}
-      <div style={hideWhenVisible}>
+      <li className='blog blogDetailsShort' style={hideWhenVisible}>
         {buttonName}
         <button onClick={toggleVisibility}>View</button>
-      </div>
-      <div style={showWhenVisible}>
+      </li>
+      <li className='blog blogDetailsExpanded' style={showWhenVisible}>
         {blogDetails()}
         <button onClick={toggleVisibility}>Hide</button>
         {deleteButton()}
-      </div>
+      </li>
     </>
   )
 }

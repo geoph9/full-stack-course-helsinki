@@ -169,9 +169,11 @@ const App = () => {
           <BlogForm createBlog={addBlog} user={user} />
         </Togglable>
         <br />
-        {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
-        )}
+        <ul>
+          {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
+            <Blog key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />
+          )}
+        </ul>
       </>
     )
   }
