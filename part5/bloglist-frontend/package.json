@@ -18,7 +18,8 @@
     "eject": "react-scripts eject",
     "server": "json-server -p3001 db.json",
     "eslint": "eslint .",
-    "eslint-fix": "eslint . --fix"
+    "eslint-fix": "eslint . --fix",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
+    "cypress": "^9.2.0",
     "eslint-plugin-jest": "^24.7.0"
   }
 }
