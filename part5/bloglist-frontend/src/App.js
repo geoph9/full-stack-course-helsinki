@@ -20,15 +20,16 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [blogList, setBlogList] = useState(null)
 
   const blogFormRef = useRef()
 
+  const fetchAll = async () => {
+    const blogs = await blogService.getAll()
+    setBlogs( blogs.sort((first, second) => second.likes - first.likes) )
+  }
   useEffect(() => {
-    const featchAll = async () => {
-      const blogs = await blogService.getAll()
-      setBlogs( blogs )
-    }
-    featchAll()
+    fetchAll()
   }, [])
 
   useEffect(() => {
@@ -39,6 +40,24 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  useEffect(() => {
+    const blogListHTML = () => {
+      return (
+        <ul className="listOfBlogs">
+          {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
+            <Blog key={blog.id}
+              blog={blog}
+              user={user}
+              removeBlog={removeBlog}
+              increaseLikes={increaseLikes}
+            />
+          )}
+        </ul>
+      )
+    }
+    setBlogList(blogListHTML)
+  }, [blogs])
 
   const removeBlog = async (blog) => {
     const deleteConfirm = window.confirm(`Delete blog '${blog.title}' by '${blog.author}'?`)
@@ -62,6 +81,8 @@ const App = () => {
         5000
       )
     }
+    // Live time updating the list of blogs
+    fetchAll()
     return res
   }
 
@@ -185,16 +206,7 @@ const App = () => {
           <BlogForm createBlog={addBlog} user={user} />
         </Togglable>
         <br />
-        <ul className="listOfBlogs">
-          {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
-            <Blog key={blog.id}
-              blog={blog}
-              user={user}
-              removeBlog={removeBlog}
-              increaseLikes={increaseLikes}
-            />
-          )}
-        </ul>
+        {blogList}
       </>
     )
   }

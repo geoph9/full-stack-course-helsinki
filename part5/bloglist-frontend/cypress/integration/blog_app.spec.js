@@ -84,5 +84,45 @@ describe('Blog app', function() {
       cy.get('.listOfBlogs').should('not.contain', 'Title by Cypress')
     })
 
+    it('the list of blogs is sorted on likes', function() {
+      cy.createBlog({
+        title: 'Title by Cypress',
+        author: 'Cauthor',
+        url: 'http://www.cyblog.press'
+      })
+      cy.createBlog({
+        title: 'Mildly Good Book',
+        author: 'Anonymous',
+        url: 'http://www.anon.ymous'
+      })
+      cy.createBlog({
+        title: 'Very Good Book',
+        author: 'Anonymous',
+        url: 'http://www.anon.ymous'
+      })
+      cy.get('.viewBlogButton').click({ multiple: true })
+      cy.get('.blogDetailsExpanded').contains('Very Good Book').parent().find('.likeButton').click()
+      cy.wait(500)
+      cy.get('.blogDetailsExpanded').contains('Very Good Book').parent().find('.likeButton').click()
+      cy.wait(500)
+      cy.get('.blogDetailsExpanded').contains('Mildly Good Book').parent().find('.likeButton').click()
+      cy.wait(500)
+      cy.get('.numberOfLikes')
+        .should('have.length', 3)
+        .then(($els) => {
+          // we get a list of jQuery elements
+          // let's convert the jQuery object into a plain array
+          return (
+            Cypress.$.makeArray($els)
+              // and extract inner text from each
+              .map((el) => el.innerText)
+          )
+        })
+        .should('deep.equal', ['likes: 2', 'likes: 1', 'likes: 0'])
+      // cy.get('.listOfBlogs').each((item, index) => {
+      //   cy.wrap(item).
+      // })
+    })
+
   })
 })

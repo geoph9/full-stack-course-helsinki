@@ -73,7 +73,7 @@ const Blog = ({ blog, user, removeBlog, increaseLikes }) => {
       </Togglable> */}
       <li className='blog blogDetailsShort' style={hideWhenVisible}>
         {blogShortDescr}
-        <button onClick={toggleVisibility}>View</button>
+        <button className='viewBlogButton' onClick={toggleVisibility}>View</button>
       </li>
       <li className='blog blogDetailsExpanded' style={showWhenVisible}>
         {blogDetails()}
