@@ -44,7 +44,6 @@ const App = () => {
     const deleteConfirm = window.confirm(`Delete blog '${blog.title}' by '${blog.author}'?`)
     if (deleteConfirm === false) return
     const res = await blogService.removeBlog(blog)
-    console.log('GORE RESUTLS:', res)
     if (res) {
       setBlogs(  // remove blog
         blogs.filter((b) => b.id !== blog.id)
@@ -54,13 +53,14 @@ const App = () => {
 
   const increaseLikes = async (blog) => {
     const newBlog = { ...blog, likes: blog.likes+1 }
-    console.log('NEW BLOG:', newBlog)
+    // console.log('NEW BLOG:', newBlog)
     const res = await blogService.update(newBlog)
     if (res === false) {
-      setErrorMessage('JWT Token expired. Logout and re-login')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      showNotification(
+        setErrorMessage,
+        'JWT Token expired. Logout and re-login',
+        5000
+      )
     }
     return res
   }
@@ -138,12 +138,14 @@ const App = () => {
   const loginForm = () => {
     return (
       <div>
+        <h1>Blogs</h1>
         <h2>Log in to application</h2>
         <Notification message={errorMessage} type="error" />
         <form onSubmit={handleLogin}>
           <div>
             username
             <input
+              id="username"
               type="text"
               value={username}
               name="Username"
@@ -153,13 +155,14 @@ const App = () => {
           <div>
             password
             <input
+              id="password"
               type="password"
               value={password}
               name="Password"
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button type="submit">login</button>
+          <button id="login-button" type="submit">login</button>
         </form>
       </div>
     )
@@ -182,7 +185,7 @@ const App = () => {
           <BlogForm createBlog={addBlog} user={user} />
         </Togglable>
         <br />
-        <ul>
+        <ul className="listOfBlogs">
           {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
             <Blog key={blog.id}
               blog={blog}

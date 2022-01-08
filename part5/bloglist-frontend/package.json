@@ -19,7 +19,8 @@
     "server": "json-server -p3001 db.json",
     "eslint": "eslint .",
     "eslint-fix": "eslint . --fix",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "test:e2e": "cypress run"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +45,7 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "cypress": "^9.2.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-jest": "^24.7.0"
   }
 }

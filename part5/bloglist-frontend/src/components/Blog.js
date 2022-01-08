@@ -40,8 +40,8 @@ const Blog = ({ blog, user, removeBlog, increaseLikes }) => {
       <div>{blog.title} {blog.author}</div>
       <div>{blog.url}</div>
       <div>
-        likes: {currentLikes}
-        <button onClick={changeLikes}> like</button>
+        <span className="numberOfLikes">likes: {currentLikes}</span>
+        <button className="likeButton" onClick={changeLikes}> like</button>
       </div>
       <div>{blog.user.name}</div>
     </div>
@@ -52,6 +52,7 @@ const Blog = ({ blog, user, removeBlog, increaseLikes }) => {
     return (
       <div>
         <button
+          className="removeBlogButton"
           onClick={() => removeBlog(blog)}
           style={{
             backgroundColor: 'blue',
@@ -63,7 +64,7 @@ const Blog = ({ blog, user, removeBlog, increaseLikes }) => {
       </div>
     )
   }
-  const buttonName = `${blog.title} ${blog.author}`
+  const blogShortDescr = `${blog.title} ${blog.author}`
   ///
   return (
     <>
@@ -71,7 +72,7 @@ const Blog = ({ blog, user, removeBlog, increaseLikes }) => {
 
       </Togglable> */}
       <li className='blog blogDetailsShort' style={hideWhenVisible}>
-        {buttonName}
+        {blogShortDescr}
         <button onClick={toggleVisibility}>View</button>
       </li>
       <li className='blog blogDetailsExpanded' style={showWhenVisible}>
