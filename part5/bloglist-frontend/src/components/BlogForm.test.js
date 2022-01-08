@@ -12,8 +12,9 @@ test('<BlogForm /> updates parent state and calls onSubmit', () => {
   )
 
   const inputTitle = component.getByText('title:').querySelector('input')
-  const inputAuthor = component.getByText('author:').querySelector('input')
-  const inputURL = component.getByText('url:').querySelector('input')
+  // Another way of accessing the input field
+  const inputAuthor = component.container.querySelector('#author')
+  const inputURL = component.container.querySelector('#url')
   const form = component.container.querySelector('form')
 
   fireEvent.change(inputTitle, {
