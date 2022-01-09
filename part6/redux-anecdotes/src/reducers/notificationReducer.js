@@ -2,8 +2,8 @@ const defaultState = 'Notification Space'
 let timeoutID = null
 
 const notificationReducer = (state = defaultState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
+  // console.log('state now: ', state)
+  // console.log('action', action)
   switch (action.type) {
     case 'NEW_NOTIFICATION':
       return action.notification

@@ -6,7 +6,6 @@ const Filter = (props) => {
 
   const handleChange = (event) => {
     event.preventDefault()
-    console.log('event.target', event.target.value)
     const filterValue = event.target.value
     props.filterChange(filterValue)
   }
