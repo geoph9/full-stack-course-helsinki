@@ -1,4 +1,5 @@
 const defaultState = 'Notification Space'
+let timeoutID = null
 
 const notificationReducer = (state = defaultState, action) => {
   console.log('state now: ', state)
@@ -16,8 +17,9 @@ const notificationReducer = (state = defaultState, action) => {
 
 export const setNotification = (notification, nSeconds=5 ) => {
   return async dispatch => {
+    if (timeoutID) clearTimeout(timeoutID)
     dispatch({ type: 'NEW_NOTIFICATION', notification })
-    setTimeout(() => {
+    timeoutID = setTimeout(() => {
       dispatch(removeNotification())
     }, Math.floor(nSeconds * 1000))
   }
